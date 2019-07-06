@@ -32,3 +32,28 @@ fun String?.truncate(digits : Int = 16) : String? {
 
     return truncatedString
 }
+
+fun String?.stripHtml() : String? {
+    val pattern = "<.*?>".toRegex()
+    val pattern2 = "[^A-ZА-Яa-zа-я0-9 \\- ]".toRegex()
+    var noHtml = this?.replace(pattern, "")
+    noHtml = noHtml?.replace(pattern2, "")
+    noHtml = noHtml?.replace("nbsp", "")
+    noHtml = removeWhiteSpaces(noHtml)
+    noHtml = noHtml?.trim()
+    return noHtml
+}
+
+fun String?.removeWhiteSpaces(value : String?) : String? {
+    var result = ""
+    var prevChar = ""
+    if (value != null) {
+        for (char in value){
+            if(!(prevChar == " " && char == ' ')){
+                result += char
+            }
+            prevChar = char.toString()
+        }
+    }
+    return result
+}
