@@ -33,7 +33,7 @@ object Utils {
 
     fun transliteration(payload: String, divider: String = " "): String {
 
-            var name : String
+            var name : String = ""
             var nn : String = ""
             var div : CharArray = divider.toCharArray()
 
@@ -169,8 +169,18 @@ object Utils {
                         "YU".toCharArray()[0] -> name = "yu".capitalize()
                         "Ya".toCharArray()[0] -> name = "ya".capitalize()
                         "YA".toCharArray()[0] -> name = "ya".capitalize()
-
-                        else -> name = divider
+                        '1' -> name = "1"
+                        '2' -> name = "2"
+                        '3' -> name = "3"
+                        '!' -> name = "!"
+                        ',' -> name = ","
+                        '^' -> name = "^"
+                        '-' -> name = "-"
+                        '=' -> name = "="
+                        '+' -> name = "+"
+                        '>' -> name = ">"
+                        '<' -> name = "<"
+                        ' ' -> name = divider
 
                     }
                     nn += name
@@ -184,14 +194,19 @@ object Utils {
 
 
     fun toInitials(firstName: String?, lastName: String?): String? {
+
+        var firstName = firstName?.trim(' ')
+        var lastName = lastName?.trim(' ')
+
         if (firstName?.length != 0 && lastName?.length != 0) {
-            val firstLetter = firstName?.get(0)?.toUpperCase()
-            val secondLetter = lastName?.get(0)?.toUpperCase()
-            if (!firstName.isNullOrBlank() && !lastName.isNullOrBlank()) return "$firstLetter$secondLetter"
-            else if (firstName.isNullOrBlank() && lastName.isNullOrBlank()) return null
-            else if (firstName.isNullOrBlank()) return "$secondLetter"
-            else if (lastName.isNullOrBlank()) return "$firstLetter"
-            else return null
+
+                val firstLetter = firstName?.get(0)?.toUpperCase()
+                val secondLetter = lastName?.get(0)?.toUpperCase()
+                if (!firstName.isNullOrBlank() && !lastName.isNullOrBlank()) return "$firstLetter$secondLetter"
+                else if (firstName.isNullOrBlank() && lastName.isNullOrBlank()) return null
+                else if (firstName.isNullOrBlank()) return "$secondLetter"
+                else if (lastName.isNullOrBlank()) return "$firstLetter"
+                else return null
 
         }
         if (firstName.isEmptyOrBlank() || lastName.isEmptyOrBlank()){

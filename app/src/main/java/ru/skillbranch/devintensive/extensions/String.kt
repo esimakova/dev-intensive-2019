@@ -6,14 +6,14 @@ fun String.endsWith2to4() : Boolean = this.endsWith("2")
 fun String?.isEmptyOrBlank() : Boolean = this?.isEmpty() == true || this?.isBlank() == true
 
 fun String?.truncate(digits : Int = 16) : String? {
-    val trimmedString = this?.trim()
+    var trimmedString = this?.trim(' ')
     val length = trimmedString?.length
     var truncatedString : String? = trimmedString
     val placeholder = "..."
 
     if (length != null && length > digits) {
         if(length > digits)
-        truncatedString = this?.substring(0, digits)
+        truncatedString = trimmedString?.substring(0, digits)
 
             if (truncatedString?.get(digits-1)?.isWhitespace()!!){
                 truncatedString = truncatedString?.trim()
@@ -35,12 +35,18 @@ fun String?.truncate(digits : Int = 16) : String? {
 
 fun String?.stripHtml() : String? {
     val pattern = "<.*?>".toRegex()
-    val pattern2 = "[^A-ZА-Яa-zа-я0-9 \\- ]".toRegex()
+    //val pattern2 = "[^A-ZА-Яa-zа-я0-9 \\- ]".toRegex()
+    val pattern3 = "[!@#\$%^&*]".toRegex()
     var noHtml = this?.replace(pattern, "")
-    noHtml = noHtml?.replace(pattern2, "")
-    noHtml = noHtml?.replace("nbsp", "")
+    //noHtml = noHtml?.replace(pattern2, "")
+    noHtml = noHtml?.replace("&nbsp;", "")
+    noHtml = noHtml?.replace("&amp;", "")
+    noHtml = noHtml?.replace("&lt;", "")
+    noHtml = noHtml?.replace("&gt;", "")
+    noHtml = noHtml?.replace("&#39;", "")
+    noHtml = noHtml?.replace("&quot;", "")
     noHtml = removeWhiteSpaces(noHtml)
-    noHtml = noHtml?.trim()
+    //noHtml = noHtml?.trim()
     return noHtml
 }
 
