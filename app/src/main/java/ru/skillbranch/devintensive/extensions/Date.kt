@@ -35,20 +35,20 @@ enum class TimeUnits{
 
     fun plural(number : Int) : String {
         when(this){
-            SECOND -> if (number == 1) return "$number секунду"
-            else if (number in 10..20 || number in 110..120) return "$number секунд"
+            SECOND -> if (number == 1 || (number.toString().endsWith("1") && !number.toString().endsWith("11"))) return "$number секунду"
+            else if (number.toString().endsWith12to14()) return "$number секунд"
             else if (number.toString().endsWith2to4()) return "$number секунды"
             else return "$number секунд"
-            MINUTE -> if (number == 1) return "$number минуту"
-            else if (number in 10..20 || number in 110..120) return "$number минут"
+            MINUTE -> if (number == 1 || (number.toString().endsWith("1") && !number.toString().endsWith("11"))) return "$number минуту"
+            else if (number.toString().endsWith12to14()) return "$number минут"
             else if (number.toString().endsWith2to4()) return "$number минуты"
             else return "$number минут"
-            HOUR -> if (number == 1) return "$number час"
-            else if (number in 10..20 || number in 110..120) return "$number часов"
+            HOUR -> if (number == 1 || (number.toString().endsWith("1") && !number.toString().endsWith("11"))) return "$number час"
+            else if (number.toString().endsWith12to14()) return "$number часов"
             else if (number.toString().endsWith2to4()) return "$number часа"
             else return "$number часов"
-            DAY -> if (number == 1) return "$number день"
-            else if (number in 10..20 || number in 110..120) return "$number дней"
+            DAY -> if (number == 1 || (number.toString().endsWith("1") && !number.toString().endsWith("11"))) return "$number день"
+            else if (number.toString().endsWith12to14()) return "$number дней"
             else if (number.toString().endsWith2to4()) return "$number дня"
             else return "$number дней"
         }
