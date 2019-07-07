@@ -1,6 +1,5 @@
 package ru.skillbranch.devintensive.models
 
-import src.main.java.ru.skillbranch.devintensive.models.User
 import java.util.*
 
 abstract class BaseMessage(

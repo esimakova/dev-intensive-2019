@@ -1,4 +1,4 @@
-package src.main.java.ru.skillbranch.devintensive.models
+package ru.skillbranch.devintensive.models
 
 
 import ru.skillbranch.devintensive.utils.Utils
