@@ -11,13 +11,39 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
         Question.IDLE -> Question.IDLE.question
     }
 
-    fun listenAnswer(answer : String) : Pair<String, Triple<Int, Int, Int>> {
-        return if (question.answers.contains(answer)) {
+    fun checkAnswer(answer: String) : Pair<String, Triple<Int, Int, Int>> {
+        return if (question.answers.contains(answer.toLowerCase())) {
             question = question.nextQuestion()
-            "Отлично - это правильный ответ!\n${question.question}" to status.color
+            "Отлично - ты справился\n${question.question}" to status.color
+        } else if (status.equals(Status.CRITICAL)){
+            status = Status.NORMAL
+            question = Question.NAME
+            "Это неправильный ответ. Давай все по новой\n${question.question}" to status.color
         } else {
             status = status.nextStatus()
-            "Это неправильный ответ!\n${question.question}" to status.color
+            "Это неправильный ответ\n${question.question}" to status.color
+        }
+    }
+
+    fun listenAnswer(answer : String) : Pair<String, Triple<Int, Int, Int>> {
+
+        val isFirstLetterUpperCase = answer.toCharArray()[0].isUpperCase()
+        val isFirstLetterILowerCase = answer.toCharArray()[0].isLowerCase()
+        val doesntcontainDigits = answer.contains("\\d".toRegex())
+        val containsOnlyDigits = answer.contains("^[0-9]+$".toRegex())
+        val containsOnlyDigitsAndLengthIs7 = answer.contains("^[0-9]+$".toRegex()) && answer.length == 7
+        return when(question){
+            Question.NAME -> if (!isFirstLetterUpperCase) "Имя должно начинаться с заглавной буквы\n${question.question}" to status.color
+            else checkAnswer(answer)
+            Question.PROFESSION -> if (!isFirstLetterILowerCase) "Профессия должна начинаться со строчной буквы\n${question.question}" to status.color
+            else checkAnswer(answer)
+            Question.MATERIAL -> if (doesntcontainDigits) "Материал не должен содержать цифр\n${question.question}" to status.color
+            else checkAnswer(answer)
+            Question.BDAY -> if (!containsOnlyDigits) "Год моего рождения должен содержать только цифры\n${question.question}" to status.color
+            else checkAnswer(answer)
+            Question.SERIAL -> if (!containsOnlyDigitsAndLengthIs7) "Серийный номер содержит только цифры, и их 7\n${question.question}" to status.color
+            else checkAnswer(answer)
+            Question.IDLE -> "${question.question}" to status.color
         }
     }
 
@@ -38,7 +64,7 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
         SERIAL("Мой серийный номер?", listOf("2716057")){
             override fun nextQuestion(): Question = IDLE
         },
-        IDLE("На этом всё, вопросов больше нет", listOf()){
+        IDLE("На этом все, вопросов больше нет", listOf()){
             override fun nextQuestion(): Question = IDLE
         };
 
@@ -49,7 +75,7 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
         NORMAL(Triple(255, 255, 255)),
         WARNING(Triple(255, 120, 0)),
         DANGER(Triple(255, 60, 60)),
-        CRITICAL(Triple(255, 255, 0));
+        CRITICAL(Triple(255, 0, 0));
 
         fun nextStatus() : Status{
             return if (this.ordinal < values().lastIndex){
@@ -59,4 +85,5 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
             }
         }
     }
+
 }
