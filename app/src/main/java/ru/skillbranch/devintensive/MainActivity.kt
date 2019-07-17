@@ -8,12 +8,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
+import ru.skillbranch.devintensive.extensions.hideKeyboard
 import ru.skillbranch.devintensive.models.Bender
 import java.util.*
 
@@ -57,6 +60,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         textTxt.text = benderObj.askQuestion()
         sendBtn.setOnClickListener(this)
+        messageEt.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE){
+                onClick(sendBtn)
+                hideKeyboard()
+                true
+            }
+            else false
+
+        }
+
     }
 
     /**
@@ -170,6 +183,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         outState?.putString("STATUS", benderObj.status.name)
         outState?.putString("QUESTION", benderObj.question.name)
         Log.d("M_MainActivity","onSaveInstanceState ${benderObj.status.name} ${benderObj.question.name}")
+    }
+
+    fun editorActionListener(v: TextView?, actionId : Int, event : KeyEvent) : Boolean{
+        if (actionId == EditorInfo.IME_ACTION_DONE){
+            hideKeyboard()
+            return true
+        }
+        return false
     }
 
 
