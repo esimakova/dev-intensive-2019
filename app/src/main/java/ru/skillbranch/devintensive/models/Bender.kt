@@ -27,24 +27,28 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
 
     fun listenAnswer(answer : String) : Pair<String, Triple<Int, Int, Int>> {
 
-        val isFirstLetterUpperCase = answer.toCharArray()[0].isUpperCase()
-        val isFirstLetterILowerCase = answer.toCharArray()[0].isLowerCase()
-        val doesntcontainDigits = answer.contains("\\d".toRegex())
-        val containsOnlyDigits = answer.contains("^[0-9]+$".toRegex())
-        val containsOnlyDigitsAndLengthIs7 = answer.contains("^[0-9]+$".toRegex()) && answer.length == 7
-        return when(question){
-            Question.NAME -> if (!isFirstLetterUpperCase) "Имя должно начинаться с заглавной буквы\n${question.question}" to status.color
-            else checkAnswer(answer)
-            Question.PROFESSION -> if (!isFirstLetterILowerCase) "Профессия должна начинаться со строчной буквы\n${question.question}" to status.color
-            else checkAnswer(answer)
-            Question.MATERIAL -> if (doesntcontainDigits) "Материал не должен содержать цифр\n${question.question}" to status.color
-            else checkAnswer(answer)
-            Question.BDAY -> if (!containsOnlyDigits) "Год моего рождения должен содержать только цифры\n${question.question}" to status.color
-            else checkAnswer(answer)
-            Question.SERIAL -> if (!containsOnlyDigitsAndLengthIs7) "Серийный номер содержит только цифры, и их 7\n${question.question}" to status.color
-            else checkAnswer(answer)
-            Question.IDLE -> "${question.question}" to status.color
+        if (!answer.isNullOrBlank()){
+            val isFirstLetterUpperCase = answer.toCharArray()[0]?.isUpperCase()
+            val isFirstLetterLowerCase = answer.toCharArray()[0].isLowerCase()
+            val doesntcontainDigits = answer.contains("\\d".toRegex())
+            val containsOnlyDigits = answer.contains("^[0-9]+$".toRegex())
+            val containsOnlyDigitsAndLengthIs7 = answer.contains("^[0-9]+$".toRegex()) && answer.length == 7
+            return when(question){
+                Question.NAME -> if (!isFirstLetterUpperCase) "Имя должно начинаться с заглавной буквы\n${question.question}" to status.color
+                else checkAnswer(answer)
+                Question.PROFESSION -> if (!isFirstLetterLowerCase) "Профессия должна начинаться со строчной буквы\n${question.question}" to status.color
+                else checkAnswer(answer)
+                Question.MATERIAL -> if (doesntcontainDigits) "Материал не должен содержать цифр\n${question.question}" to status.color
+                else checkAnswer(answer)
+                Question.BDAY -> if (!containsOnlyDigits) "Год моего рождения должен содержать только цифры\n${question.question}" to status.color
+                else checkAnswer(answer)
+                Question.SERIAL -> if (!containsOnlyDigitsAndLengthIs7) "Серийный номер содержит только цифры, и их 7\n${question.question}" to status.color
+                else checkAnswer(answer)
+                Question.IDLE -> "${question.question}" to status.color
+            }
         }
+        else return "${question.question}" to status.color
+
     }
 
 
